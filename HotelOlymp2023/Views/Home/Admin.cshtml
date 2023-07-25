@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Admin Page";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Assuming you have a shared layout
+}
+<p>User Id : @ViewData["UserID"]</p>
+@if (ViewData["UserID"]?.ToString() == "9fe3c911-048d-4b88-ae6f-e2f41d843c92")
+{
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Cameras</h5>
+                        <p class="card-text">Click the button below to manage cameras.</p>
+                        <a href="@Url.Action("Index", "Cameras")" class="btn btn-primary">Manage Cameras</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Reservations</h5>
+                        <p class="card-text">Click the button below to manage reservations.</p>
+                        <a href="@Url.Action("Rezervations", "Reservations")" class="btn btn-primary">Manage Reservations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger" role="alert">
+            You are not authorized to access this page.
+        </div>
+    </div>
+}

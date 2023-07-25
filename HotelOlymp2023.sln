@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelOlymp2023", "HotelOlymp2023\HotelOlymp2023.csproj", "{7DBD96BE-DF60-4180-95DD-19C8B70E176A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18D982A5-D703-44C2-8AE5-DAE1D946A7A7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DBD96BE-DF60-4180-95DD-19C8B70E176A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBD96BE-DF60-4180-95DD-19C8B70E176A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DBD96BE-DF60-4180-95DD-19C8B70E176A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DBD96BE-DF60-4180-95DD-19C8B70E176A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C19B489-254E-410B-A9E3-926E9DB5D946}
+	EndGlobalSection
+EndGlobal

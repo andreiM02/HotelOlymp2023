@@ -281,7 +281,7 @@ footer {
     border: 1px solid #ddd;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius: 5px;
+    border-radius: 15px;
 }
 
 .room-details {
@@ -299,3 +299,30 @@ footer {
     .room-action a:hover {
         background-color: #1a73e8;
     }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn {
+    margin-right: 10px;
+}
+
+.room-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.room {
+    width: auto;
+    margin: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.room-action {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}

@@ -30,7 +30,7 @@ namespace HotelOlymp2023.Controllers
 
             var currentUserId = _userManager.GetUserId(this.User);
 
-            // Fetch reservations for the current user from the database
+            
             var reservations = _context.Reservations
                 .Where(r => r.UserId == currentUserId)
                 .ToList();
@@ -47,34 +47,34 @@ namespace HotelOlymp2023.Controllers
 
             var bookedDates = _context.Reservations
                 .Where(r => r.CameraId == roomId)
-                .ToList(); // Fetch the Reservation objects directly
+                .ToList(); 
 
             return View(bookedDates);
         }
 
 
 
-        [HttpPost]
+     /*   [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed2(int reservationId)
         {
-            // Fetch the reservation from the database
+            
             var reservation = await _context.Reservations.FindAsync(reservationId);
             if (reservation == null)
             {
-                return NotFound(); // Reservation not found, show an error message or redirect to a page
+                return NotFound(); 
             }
 
-            // Remove the reservation from the database and save the changes
+            
             _context.Reservations.Remove(reservation);
             await _context.SaveChangesAsync();
 
-            // Redirect to the MyReservations page to see the updated list
+            
             return RedirectToAction("MyReservations");
         }
 
-
+*/
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
@@ -195,7 +195,7 @@ namespace HotelOlymp2023.Controllers
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl)
         {
             if (_context.Reservations == null)
             {
@@ -208,6 +208,12 @@ namespace HotelOlymp2023.Controllers
             }
             
             await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            // If returnUrl is empty or not a valid local URL, redirect to the default location
             return RedirectToAction(nameof(Index));
         }
 

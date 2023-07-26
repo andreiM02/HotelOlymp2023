@@ -57,11 +57,11 @@ namespace HotelOlymp2023.Controllers
             ViewData["UserID"] = _userManager.GetUserId(this.User);
             if (!string.IsNullOrEmpty(CheckInDate) && !string.IsNullOrEmpty(CheckOutDate))
             {
-                // Convertim datele de check-in și check-out din format text în DateTime
+                
                 if (DateTime.TryParse(CheckInDate, out DateTime checkInDate) &&
                     DateTime.TryParse(CheckOutDate, out DateTime checkOutDate))
                 {
-                    // Fetch available rooms from the database using Entity Framework Core
+                   
                     var availableRooms = _dbContext.Cameras
                         .Where(room =>
                             !_dbContext.Reservations.Any(reservation =>
@@ -76,7 +76,7 @@ namespace HotelOlymp2023.Controllers
                 }
             }
 
-            // If the CheckInDate or CheckOutDate is not provided or invalid, return all rooms as before
+           
             var allRooms = _dbContext.Cameras.ToList();
             return View(allRooms);
 
@@ -97,7 +97,7 @@ namespace HotelOlymp2023.Controllers
                 return NotFound();
             }
 
-            // Check if there are any overlapping reservations for the chosen period
+            
             var overlappingReservations = await _context.Reservations
                 .Where(r => r.CameraId == cameraId &&
                             !(r.CheckOutDate <= checkInDate || r.CheckInDate >= checkOutDate))
@@ -105,8 +105,7 @@ namespace HotelOlymp2023.Controllers
 
             if (overlappingReservations.Count > 0)
             {
-                // If there are overlapping reservations, show a message or redirect with an error
-                // For example:
+               
                 TempData["ErrorMessage"] = "The room is already booked!";
                 return RedirectToAction(nameof(Index1));
             }

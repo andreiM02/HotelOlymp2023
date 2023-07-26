@@ -1,41 +1,51 @@
 ﻿@model List<Camera>
-<p>User Id : @ViewData["UserID"]</p>
+<p>User Id: @ViewData["UserID"]</p>
 <h1>Book a room</h1>
 
 <form id="searchForm" asp-controller="Cameras" asp-action="Index1" method="post">
-    <label for="checkInDate">Check-In Date:</label>
-    <input type="date" id="checkInDate" name="checkInDate" required />
-
-    <label for="checkOutDate">Check-Out Date:</label>
-    <input type="date" id="checkOutDate" name="checkOutDate" required />
-
-    <button type="submit" name="searchButton">Search</button>
+    <div class="form-group">
+        <div class="d-flex">
+            <div class="mr-3">
+                <label for="checkInDate">Check-In Date:</label>
+                <input type="date" id="checkInDate" name="checkInDate" class="form-control" required />
+            </div>
+            <div>
+                <label for="checkOutDate">Check-Out Date:</label>
+                <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required />
+            </div>
+        </div>
+    </div>
+    <button type="submit" name="searchButton" class="btn btn-primary">Search</button>
 </form>
 
 <div class="room-container">
     @foreach (var room in Model)
     {
-            <div class="room">
-                <div class="room-details">
-                    <h3>ID: @room.ID</h3>
-                    <p>Room Number: @room.RoomNumber</p>
-                    <p>Room Type: @room.RoomType</p>
-                    <p>Price: @room.Price</p>
-                    <p>Capacity: @room.Capacity</p>
-                </div>
-                <div class="room-action">
-                    <!-- Add the booking form with hidden fields for UserId and CameraId -->
-                    <form method="post" action="@Url.Action("BookRoom", "Cameras")">
-                        <input type="hidden" name="CameraId" value="@room.ID" />
-                        <label for="checkInDate">Check-In Date:</label>
-                    <input type="date" id="checkInDate" name="checkInDate" required />
-                    <label for="checkOutDate">Check-Out Date:</label>
-                    <input type="date" id="checkOutDate" name="checkOutDate" required />
-                        <button type="submit">Book</button>
-                    <a href="@Url.Action("ViewBookedDates", "Reservations", new { roomId = room.ID })">View Booked Dates</a>
-                    </form>
-                </div>
+        <div class="room">
+            <div class="room-details">
+                <h3>ID: @room.ID</h3>
+                <p>Room Number: @room.RoomNumber</p>
+                <p>Room Type: @room.RoomType</p>
+                <p>Price: @room.Price</p>
+                <p>Capacity: @room.Capacity</p>
             </div>
+            <div class="room-action">
+                
+                <form method="post" action="@Url.Action("BookRoom", "Cameras")">
+                    <input type="hidden" name="CameraId" value="@room.ID" />
+                    <div class="form-group">
+                        <label for="checkInDate">Check-In Date:</label>
+                        <input type="date" id="checkInDate" name="checkInDate" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="checkOutDate">Check-Out Date:</label>
+                        <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-success">Book</button>
+                    <a href="@Url.Action("ViewBookedDates", "Reservations", new { roomId = room.ID })" class="btn btn-info">View Booked Dates</a>
+                </form>
+            </div>
+        </div>
     }
 </div>
 
@@ -45,61 +55,3 @@
         alert("@TempData["ErrorMessage"]");
     </script>
 }
-
-
-
-<script>
-    // Function to save the selected check-in and check-out dates to local storage
-    function saveDates() {
-        var checkInDate = document.getElementById("checkInDate").value;
-        var checkOutDate = document.getElementById("checkOutDate").value;
-
-        localStorage.setItem("checkInDate", checkInDate);
-        localStorage.setItem("checkOutDate", checkOutDate);
-    }
-
-    // Function to set the default values for the check-in and check-out date inputs
-    function setDefaultDates() {
-        var checkInDate = localStorage.getItem("checkInDate");
-        var checkOutDate = localStorage.getItem("checkOutDate");
-
-        if (checkInDate) {
-            document.getElementById("checkInDate").value = checkInDate;
-        }
-
-        if (checkOutDate) {
-            document.getElementById("checkOutDate").value = checkOutDate;
-        }
-    }
-
-    // Call the setDefaultDates function on page load
-    window.onload = setDefaultDates;
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Get references to the date picker fields
-        const checkInDateField = document.getElementById("checkInDate");
-        const checkOutDateField = document.getElementById("checkOutDate");
-
-        // Set default values for check-in and check-out dates (e.g., today and tomorrow)
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-        checkInDateField.value = today.toISOString().slice(0, 10);
-        checkOutDateField.value = tomorrow.toISOString().slice(0, 10);
-
-        // Prevent selecting past dates for check-in
-        checkInDateField.min = today.toISOString().slice(0, 10);
-
-        // Add event listener to the "Search" button
-        const searchButton = document.querySelector("#searchForm [type=submit]");
-        searchButton.addEventListener("click", function (event) {
-            // Prevent form submission if check-in date is after check-out date
-            if (checkInDateField.value > checkOutDateField.value) {
-                event.preventDefault();
-                alert("Check-in date cannot be after check-out date.");
-            }
-        });
-    });
-</script>

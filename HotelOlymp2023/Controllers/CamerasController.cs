@@ -9,6 +9,8 @@ using HotelOlymp2023.Data;
 using HotelOlymp2023.Models;
 using HotelOlymp2023.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
+using HotelOlymp2023.Interfaces;
+
 
 namespace HotelOlymp2023.Controllers
 {
@@ -17,12 +19,14 @@ namespace HotelOlymp2023.Controllers
         private readonly AuthDbContext _context;
         private readonly AuthDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IBookingService _bookingService;
 
-        public CamerasController(AuthDbContext context, AuthDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public CamerasController(AuthDbContext context, AuthDbContext dbContext, UserManager<ApplicationUser> userManager, IBookingService bookingService)
         {
             _context = context;
             _dbContext = dbContext;
             this._userManager = userManager;
+            _bookingService = bookingService;
         }
 
         // GET: Cameras
@@ -72,11 +76,16 @@ namespace HotelOlymp2023.Controllers
                         )
                         .ToList();
 
+                    TempData["CheckInDate"] = CheckInDate;
+                    TempData["CheckOutDate"] = CheckOutDate;
+
                     return View(availableRooms);
                 }
             }
 
-           
+ 
+
+
             var allRooms = _dbContext.Cameras.ToList();
             return View(allRooms);
 
@@ -86,43 +95,23 @@ namespace HotelOlymp2023.Controllers
         [HttpPost]
         public async Task<IActionResult> BookRoom(int cameraId, DateTime checkInDate, DateTime checkOutDate)
         {
-            var camera = await _context.Cameras.FindAsync(cameraId);
-            if (camera == null)
+            // Assuming you have the userId available, you can get it from the current user.
+            string userId = _userManager.GetUserId(this.User);
+
+            // Use the BookingService to book the room.
+            bool isBooked = await _bookingService.BookRoomAsync(cameraId, checkInDate, checkOutDate, userId);
+
+            if (isBooked)
             {
-                return NotFound(); 
+                // Room booked successfully, do something.
+                return RedirectToAction("Index1");
             }
-
-            if (_userManager.GetUserId(this.User) == null)
+            else
             {
-                return NotFound();
+                // Room booking failed, handle the error.
+                TempData["ErrorMessage"] = "Unable to book the room.";
+                return RedirectToAction("Index1");
             }
-
-            
-            var overlappingReservations = await _context.Reservations
-                .Where(r => r.CameraId == cameraId &&
-                            !(r.CheckOutDate <= checkInDate || r.CheckInDate >= checkOutDate))
-                .ToListAsync();
-
-            if (overlappingReservations.Count > 0)
-            {
-               
-                TempData["ErrorMessage"] = "The room is already booked!";
-                return RedirectToAction(nameof(Index1));
-            }
-
-            Reservation reservation = new Reservation
-            {
-                UserId = _userManager.GetUserId(this.User),
-                CameraId = camera.ID,
-                CheckInDate = DateTime.Parse(checkInDate.ToString("yyyy-MM-dd")),
-                CheckOutDate = DateTime.Parse(checkOutDate.ToString("yyyy-MM-dd"))
-            };
-
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
-
-    
-            return RedirectToAction("Index1");
         }
 
 
